@@ -35,12 +35,12 @@ const Home = ({navigation}) => {
           //   console.log(stats);
 
           const sprites = details.sprites;
-          console.log(sprites);
+          // console.log(sprites);
 
           return {
             name: details.name,
-            image: details.sprites.front_default, // Pokémon image URL
-            types: types, // Pokémon types
+            image: details.sprites.front_default,
+            types: types,
             stats: stats,
             sprites: sprites,
           };

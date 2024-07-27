@@ -1,26 +1,32 @@
-// Images screen (Images.js)
 import React from 'react';
-import {View, Text, Image, ScrollView, StyleSheet} from 'react-native';
-import {SliderBox} from 'react-native-image-slider-box';
+import {View, StyleSheet, Image, Text} from 'react-native';
+import Swiper from 'react-native-swiper';
 
-const Images = ({route}) => {
+const ImageScreen = ({route}) => {
   const {sprites} = route.params;
-  const allImg = [
+
+  const images = [
     sprites.back_default,
     sprites.back_shiny,
-    sprites.back_default,
     sprites.front_default,
     sprites.front_shiny,
-    sprites.back_female,
+    sprites.other.home.front_default,
+    sprites.other.home.front_shiny,
   ];
-  console.log(allImg);
+
   return (
-    <ScrollView style={styles.container}>
-      <SliderBox />
-      {allImg.map((sprite, index) => (
-        <Image key={index} source={{uri: sprite}} style={styles.image} />
+    <Swiper
+      style={styles.wrapper}
+      showsButtons={true}
+      autoplay
+      autoplayTimeout={3}
+      loop>
+      {images.map((image, index) => (
+        <View key={index} style={styles.slide}>
+          <Image source={{uri: image}} style={styles.image} />
+        </View>
       ))}
-    </ScrollView>
+    </Swiper>
   );
 };
 
@@ -28,13 +34,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-    padding: 10,
+  },
+  wrapper: {
+    height: '100%',
+  },
+  slide: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
     width: '100%',
-    height: 200,
-    marginBottom: 10,
+    height: 400,
   },
 });
 
-export default Images;
+export default ImageScreen;

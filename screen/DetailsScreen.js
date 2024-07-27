@@ -11,12 +11,9 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Bar} from 'react-native-progress';
 
 const Details = ({navigation, route}) => {
-  const {pokemon} = route.params; // Retrieve the passed Pokémon data
-  //   console.log('i amher ', pokemon);
+  const {pokemon} = route.params;
   const stat = pokemon.stats.map(item => item.stat);
-  //   const stat = pokemon.stats.stat;
   const base_stat = pokemon.stats.map(item => item.base_stat);
-  const sprites = pokemon.sprites;
   console.log(base_stat);
   const icons = [
     'cards-heart-outline',
@@ -26,6 +23,7 @@ const Details = ({navigation, route}) => {
     'shield-sword',
     'run-fast',
   ];
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.imgConatiner}>
@@ -33,52 +31,38 @@ const Details = ({navigation, route}) => {
         <Text style={styles.name}>{pokemon.name}</Text>
         <Text style={styles.types}>{pokemon.types}</Text>
         <TouchableOpacity
-          style={{
-            alignItems: 'center',
-            backgroundColor: '#2a9d8f',
-            height: 30,
-            justifyContent: 'center',
-            width: '35%',
-            alignSelf: 'center',
-            borderRadius: 10,
-          }}
+          style={styles.button}
           onPress={() =>
             navigation.navigate('Images', {sprites: pokemon.sprites})
           }>
-          <Text style={{fontSize: 16, color: 'white'}}>View images</Text>
+          <Text style={styles.buttonText}>View images</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.statsContainer}>
         <Text style={styles.statsTitle}>Stats:</Text>
-        {stat.map((stat, index) => {
-          //   console.log(stat.name);
-          //   console.log(stat);
-          return (
-            <View style={{padding: 10}}>
-              <View
-                style={{flexDirection: 'row', gap: 20, alignItems: 'center'}}>
-                <View>
-                  <Icon name={icons[index]} size={42} color="#495057" />
-                </View>
-                <View key={index} style={styles.statsView}>
-                  <Text style={styles.stat}>
-                    {stat.name} : {base_stat[index]}
-                  </Text>
-
-                  <Bar
-                    progress={base_stat[index] / 100}
-                    width={100}
-                    height={20}
-                    color={'#2a9d8f'}
-                    unfilledColor={'#e0e0e0'}
-                    borderWidth={0}
-                    borderRadius={5}
-                  />
-                </View>
+        {stat.map((statItem, index) => (
+          <View key={statItem.name} style={{padding: 10}}>
+            <View style={{flexDirection: 'row', gap: 20, alignItems: 'center'}}>
+              <View>
+                <Icon name={icons[index]} size={42} color="#495057" />
+              </View>
+              <View style={styles.statsView}>
+                <Text style={styles.stat}>
+                  {statItem.name} : {base_stat[index]}
+                </Text>
+                <Bar
+                  progress={base_stat[index] / 100}
+                  width={100}
+                  height={20}
+                  color={'#2a9d8f'}
+                  unfilledColor={'#e0e0e0'}
+                  borderWidth={0}
+                  borderRadius={5}
+                />
               </View>
             </View>
-          );
-        })}
+          </View>
+        ))}
       </View>
       <View style={{height: 50}} />
     </ScrollView>
@@ -90,7 +74,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: '#f5f5f5',
-    // bottom:20
   },
   image: {
     width: 200,
@@ -135,8 +118,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   statsView: {
-    // flexDirection: 'row',
-    // alignItems: 'center',
     gap: 10,
   },
   types: {
@@ -145,6 +126,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 10,
+  },
+  button: {
+    alignItems: 'center',
+    backgroundColor: '#2a9d8f',
+    height: 30,
+    justifyContent: 'center',
+    width: '35%',
+    alignSelf: 'center',
+    borderRadius: 10,
+  },
+  buttonText: {
+    fontSize: 16,
+    color: 'white',
   },
 });
 
