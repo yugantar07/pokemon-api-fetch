@@ -7,22 +7,23 @@ import {
   Image,
   ActivityIndicator,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
 
 const Home = ({navigation}) => {
   const [pokemon, setPokemon] = useState([]);
+  const [filteredPokemon, setFilteredPokemon] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const fetchPokemonData = async () => {
       try {
-        // Fetch list of Pokémon
         const response = await fetch(
           'https://pokeapi.co/api/v2/pokemon?limit=20',
         );
         const data = await response.json();
 
-        // Fetch details for each Pokémon
         const detailedPokemonPromises = data.results.map(async poke => {
           const res = await fetch(poke.url);
           const details = await res.json();
@@ -48,6 +49,7 @@ const Home = ({navigation}) => {
 
         const detailedPokemon = await Promise.all(detailedPokemonPromises);
         setPokemon(detailedPokemon);
+        setFilteredPokemon(detailedPokemon);
       } catch (error) {
         console.error('Error fetching Pokémon data:', error);
       } finally {
@@ -58,6 +60,22 @@ const Home = ({navigation}) => {
     fetchPokemonData();
   }, []);
 
+  const handleSearch = text => {
+    setSearchQuery(text);
+    if (text) {
+      const filteredData = pokemon.filter(poke =>
+        poke.name.toLowerCase().includes(text.toLowerCase()),
+      );
+      setFilteredPokemon(filteredData);
+    } else {
+      setFilteredPokemon(pokemon);
+    }
+  };
+
+  const navigateToDetails = Details => {
+    navigation.navigate('Details', {pokemon: Details});
+  };
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -65,17 +83,19 @@ const Home = ({navigation}) => {
       </View>
     );
   }
-
-  const navigateToDetails = Details => {
-    navigation.navigate('Details', {pokemon: Details});
-  };
-
   return (
     <View style={styles.container}>
+      <TextInput
+        style={styles.searchBar}
+        placeholder="Search Pokémon"
+        value={searchQuery}
+        onChangeText={handleSearch}
+      />
       <FlatList
-        data={pokemon}
+        data={filteredPokemon}
         renderItem={({item}) => (
           <TouchableOpacity
+            activeOpacity={0.6}
             style={styles.card}
             onPress={() => navigateToDetails(item)}>
             <Image source={{uri: item.image}} style={styles.image} />
@@ -96,6 +116,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
+  },
+  searchBar: {
+    height: 50,
+    margin: 10,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    backgroundColor: '#fff',
+    fontSize: 16,
   },
   card: {
     backgroundColor: '#ffffff',

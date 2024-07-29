@@ -14,7 +14,7 @@ const Details = ({navigation, route}) => {
   const {pokemon} = route.params;
   const stat = pokemon.stats.map(item => item.stat);
   const base_stat = pokemon.stats.map(item => item.base_stat);
-  console.log(base_stat);
+  // console.log(base_stat);
   const icons = [
     'cards-heart-outline',
     'sword',
@@ -52,7 +52,7 @@ const Details = ({navigation, route}) => {
                 </Text>
                 <Bar
                   progress={base_stat[index] / 100}
-                  width={100}
+                  width={130}
                   height={20}
                   color={'#2a9d8f'}
                   unfilledColor={'#e0e0e0'}
@@ -125,12 +125,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 10,
+    marginBottom: 15,
   },
   button: {
     alignItems: 'center',
     backgroundColor: '#2a9d8f',
-    height: 30,
+    height: 40,
     justifyContent: 'center',
     width: '35%',
     alignSelf: 'center',
@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     color: 'white',
+    fontWeight: '700',
   },
 });
 
